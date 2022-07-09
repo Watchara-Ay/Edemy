@@ -1,4 +1,5 @@
 import 'package:edgroup/components/logout.dart';
+import 'package:edgroup/screen/coursedetail.dart';
 import 'package:edgroup/screen/login.dart';
 import 'package:flutter/material.dart';
 
@@ -71,14 +72,14 @@ class _homepageState extends State<homepage> {
                           backgroundColor: MaterialStateProperty.all(
                               Color.fromARGB(255, 0, 255, 204)),
                         ),
-                        child: const Text("Register",
+                        child: const Text("+ , -",
                             style:
                                 TextStyle(fontSize: 16, color: Colors.black)),
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const homepage()),
+                                builder: (context) => const coursedetail()),
                           );
                         },
                       ),
