@@ -1,9 +1,12 @@
 import 'package:edgroup/components/logout.dart';
 import 'package:edgroup/screen/coursedetail.dart';
+import 'package:edgroup/screen/coursedetail2.dart';
+import 'package:edgroup/screen/coursedetail4.dart';
 import 'package:edgroup/screen/login.dart';
 import 'package:flutter/material.dart';
 
 import '../components/categorries.dart';
+import 'coursedetail3.dart';
 
 class homepage extends StatefulWidget {
   const homepage({Key? key}) : super(key: key);
@@ -47,6 +50,9 @@ class _homepageState extends State<homepage> {
                   ),
                 ],
               ),
+              Container(
+                height: 20,
+              ),
               Categories(),
               Container(
                 child: SingleChildScrollView(
@@ -72,7 +78,7 @@ class _homepageState extends State<homepage> {
                           backgroundColor: MaterialStateProperty.all(
                               Color.fromARGB(255, 0, 255, 204)),
                         ),
-                        child: const Text("+ , -",
+                        child: const Text("Plus",
                             style:
                                 TextStyle(fontSize: 16, color: Colors.black)),
                         onPressed: () {
@@ -104,14 +110,14 @@ class _homepageState extends State<homepage> {
                           backgroundColor: MaterialStateProperty.all(
                               Color.fromARGB(255, 0, 255, 204)),
                         ),
-                        child: const Text("Register",
+                        child: const Text("Minus",
                             style:
                                 TextStyle(fontSize: 16, color: Colors.black)),
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const homepage()),
+                                builder: (context) => const coursedetail2()),
                           );
                         },
                       ),
@@ -136,14 +142,14 @@ class _homepageState extends State<homepage> {
                           backgroundColor: MaterialStateProperty.all(
                               Color.fromARGB(255, 0, 255, 204)),
                         ),
-                        child: const Text("Register",
+                        child: const Text("Multiply",
                             style:
                                 TextStyle(fontSize: 16, color: Colors.black)),
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const homepage()),
+                                builder: (context) => const coursedetail3()),
                           );
                         },
                       ),
@@ -168,14 +174,14 @@ class _homepageState extends State<homepage> {
                           backgroundColor: MaterialStateProperty.all(
                               Color.fromARGB(255, 0, 255, 204)),
                         ),
-                        child: const Text("Register",
+                        child: const Text("Divine",
                             style:
                                 TextStyle(fontSize: 16, color: Colors.black)),
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const homepage()),
+                                builder: (context) => const coursedetail4()),
                           );
                         },
                       ),
@@ -183,7 +189,7 @@ class _homepageState extends State<homepage> {
                   ],
                 )),
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 1.5 + 10,
+                height: MediaQuery.of(context).size.height / 1.52,
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
                 decoration: const BoxDecoration(
                   color: Color.fromARGB(255, 218, 255, 233),

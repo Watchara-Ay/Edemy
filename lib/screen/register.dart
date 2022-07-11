@@ -156,7 +156,7 @@ class Registerpage extends StatelessWidget {
             ],
           )),
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height / 1.15,
+          height: MediaQuery.of(context).size.height / 1.145,
           padding: const EdgeInsets.symmetric(horizontal: 30.0),
           decoration: const BoxDecoration(
             color: Colors.white,
