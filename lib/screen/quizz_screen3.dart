@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-import '../data/questionsplus.dart';
+import '../data/questionsmultiply.dart';
 import '../ui/shared/color.dart';
 import 'result_screen.dart';
 
-class QuizzScreen extends StatefulWidget {
-  const QuizzScreen({Key? key}) : super(key: key);
+class QuizzScreen3 extends StatefulWidget {
+  const QuizzScreen3({Key? key}) : super(key: key);
 
   @override
   _QuizzScreenState createState() => _QuizzScreenState();
 }
 
-class _QuizzScreenState extends State<QuizzScreen> {
+class _QuizzScreenState extends State<QuizzScreen3> {
   int question_pos = 0;
   int score = 0;
   bool btnPressed = false;
