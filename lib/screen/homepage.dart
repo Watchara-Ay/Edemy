@@ -2,7 +2,6 @@ import 'package:edgroup/components/logout.dart';
 import 'package:edgroup/screen/coursedetail.dart';
 import 'package:edgroup/screen/coursedetail2.dart';
 import 'package:edgroup/screen/coursedetail4.dart';
-import 'package:edgroup/screen/login.dart';
 import 'package:flutter/material.dart';
 
 import '../components/categorries.dart';
@@ -34,7 +33,7 @@ class _homepageState extends State<homepage> {
                     height: MediaQuery.of(context).size.height / 7,
                     alignment: Alignment.topLeft,
                     child: const Text(
-                      "Hi",
+                      "Hi welcome you all to learn in our app",
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 16.0,
@@ -43,10 +42,10 @@ class _homepageState extends State<homepage> {
                     ),
                   ),
                   Container(
-                    color: Color.fromARGB(255, 255, 0, 0),
                     width: MediaQuery.of(context).size.width / 3,
                     height: MediaQuery.of(context).size.height / 7,
                     alignment: Alignment.topLeft,
+                    child: Image.asset("assets/images/academy.png"),
                   ),
                 ],
               ),
