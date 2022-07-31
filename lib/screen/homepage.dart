@@ -1,4 +1,6 @@
 import 'package:edgroup/components/logout.dart';
+import 'package:edgroup/data/api/models/response/course_model.dart';
+import 'package:edgroup/data/api/services/course_service.dart';
 import 'package:edgroup/screen/coursedetail.dart';
 import 'package:edgroup/screen/coursedetail2.dart';
 import 'package:edgroup/screen/coursedetail4.dart';
@@ -17,6 +19,17 @@ class homepage extends StatefulWidget {
 class _homepageState extends State<homepage> {
   String filterType = "MATH";
   String taskPop = "close";
+
+  late Future<List<Course>> courses;
+  CourseService courseService = CourseService();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // fetch the necessary data
+    courses = courseService.getCourseList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,147 +66,30 @@ class _homepageState extends State<homepage> {
                 height: 20,
               ),
               Categories(),
-              Container(
-                child: SingleChildScrollView(
-                    child: Column(
-                  children: [
-                    Container(
-                      height: 30,
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 1.3,
-                      height: MediaQuery.of(context).size.height / 13,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all(
-                              const EdgeInsets.only(
-                                  left: 35, right: 35, top: 15, bottom: 15)),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40.0),
-                            ),
-                          ),
-                          backgroundColor: MaterialStateProperty.all(
-                              Color.fromARGB(255, 0, 255, 204)),
-                        ),
-                        child: const Text("Plus",
-                            style:
-                                TextStyle(fontSize: 16, color: Colors.black)),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const coursedetail()),
-                          );
-                        },
-                      ),
-                    ),
-                    Container(
-                      height: 24,
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 1.3,
-                      height: MediaQuery.of(context).size.height / 13,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all(
-                              const EdgeInsets.only(
-                                  left: 35, right: 35, top: 15, bottom: 15)),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40.0),
-                            ),
-                          ),
-                          backgroundColor: MaterialStateProperty.all(
-                              Color.fromARGB(255, 0, 255, 204)),
-                        ),
-                        child: const Text("Minus",
-                            style:
-                                TextStyle(fontSize: 16, color: Colors.black)),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const coursedetail2()),
-                          );
-                        },
-                      ),
-                    ),
-                    Container(
-                      height: 24,
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 1.3,
-                      height: MediaQuery.of(context).size.height / 13,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all(
-                              const EdgeInsets.only(
-                                  left: 35, right: 35, top: 15, bottom: 15)),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40.0),
-                            ),
-                          ),
-                          backgroundColor: MaterialStateProperty.all(
-                              Color.fromARGB(255, 0, 255, 204)),
-                        ),
-                        child: const Text("Multiply",
-                            style:
-                                TextStyle(fontSize: 16, color: Colors.black)),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const coursedetail3()),
-                          );
-                        },
-                      ),
-                    ),
-                    Container(
-                      height: 24,
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 1.3,
-                      height: MediaQuery.of(context).size.height / 13,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all(
-                              const EdgeInsets.only(
-                                  left: 35, right: 35, top: 15, bottom: 15)),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40.0),
-                            ),
-                          ),
-                          backgroundColor: MaterialStateProperty.all(
-                              Color.fromARGB(255, 0, 255, 204)),
-                        ),
-                        child: const Text("Divine",
-                            style:
-                                TextStyle(fontSize: 16, color: Colors.black)),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const coursedetail4()),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                )),
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 1.52,
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 218, 255, 233),
+
+              Expanded(
+                child: FutureBuilder<List<Course>>(
+                  future: courses,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return _buildCourseList(context, snapshot.data ?? []);
+                    } else if (snapshot.hasError) {
+                      return Text('${snapshot.error}');
+                    }
+
+                    // By default, show a loading spinner.
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        CircularProgressIndicator(
+                          color: Colors.black38,
+                        )
+                      ],
+                    );
+                  },
                 ),
               ),
+
               Container(
                   color: Color.fromARGB(255, 218, 255, 233),
                   height: MediaQuery.of(context).size.height / 12,
@@ -211,6 +107,51 @@ class _homepageState extends State<homepage> {
           ),
         ],
       ),
+    );
+  }
+
+  ListView _buildCourseList(BuildContext context, List<Course> courses) {
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 12,
+        vertical: 24,
+      ),
+      itemCount: courses.length,
+      itemBuilder: (context, index) {
+        var course = courses[index];
+
+        return ElevatedButton(
+          style: ButtonStyle(
+            padding: MaterialStateProperty.all(
+                const EdgeInsets.only(
+                    left: 35, right: 35, top: 15, bottom: 15)),
+            shape:
+                MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40.0),
+              ),
+            ),
+            backgroundColor: MaterialStateProperty.all(
+              const Color.fromARGB(255, 0, 255, 204)
+            ),
+          ),
+          child: Text(
+            course.name,
+            style: const TextStyle(fontSize: 16, color: Colors.black),
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => coursedetail(
+                  courseData: course,
+                ),
+              ),
+            );
+          },
+        );
+
+      },
     );
   }
 }
