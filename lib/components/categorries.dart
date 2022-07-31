@@ -8,7 +8,7 @@ class Categories extends StatefulWidget {
 }
 
 class _CategoriesState extends State<Categories> {
-  List<String> categories = ["Math", "English", "Thai"];
+  List<String> categories = ["Math", "English"];
   // By default our first item will be selected
   int selectedIndex = 0;
   // double kdefault = MediaQuery.of(context).size.width;

@@ -43,6 +43,7 @@ class _homepageState extends State<homepage> {
                     width: MediaQuery.of(context).size.width / 1.5,
                     height: MediaQuery.of(context).size.height / 7,
                     alignment: Alignment.topLeft,
+                    padding: EdgeInsets.fromLTRB(10, 30, 10, 0),
                     child: const Text(
                       "Hi",
                       style: TextStyle(
@@ -53,37 +54,38 @@ class _homepageState extends State<homepage> {
                     ),
                   ),
                   Container(
-                    color: Color.fromARGB(255, 255, 0, 0),
+                    padding: EdgeInsets.fromLTRB(10, 15, 10, 0),
+                    child: Image.asset("assets/images/academy.png"),
                     width: MediaQuery.of(context).size.width / 3,
                     height: MediaQuery.of(context).size.height / 7,
                     alignment: Alignment.topLeft,
                   ),
                 ],
               ),
-              Container(
-                height: 20,
-              ),
               Categories(),
               Expanded(
-                child: FutureBuilder<List<Course>>(
-                  future: courses,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return _buildCourseList(context, snapshot.data ?? []);
-                    } else if (snapshot.hasError) {
-                      return Text('${snapshot.error}');
-                    }
+                child: Container(
+                  color: Color.fromARGB(255, 218, 255, 233),
+                  child: FutureBuilder<List<Course>>(
+                    future: courses,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return _buildCourseList(context, snapshot.data ?? []);
+                      } else if (snapshot.hasError) {
+                        return Text('${snapshot.error}');
+                      }
 
-                    // By default, show a loading spinner.
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        CircularProgressIndicator(
-                          color: Colors.black38,
-                        )
-                      ],
-                    );
-                  },
+                      // By default, show a loading spinner.
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+                          CircularProgressIndicator(
+                            color: Colors.black38,
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
               ),
               Container(
@@ -116,32 +118,35 @@ class _homepageState extends State<homepage> {
       itemBuilder: (context, index) {
         var course = courses[index];
 
-        return ElevatedButton(
-          style: ButtonStyle(
-            padding: MaterialStateProperty.all(const EdgeInsets.only(
-                left: 35, right: 35, top: 15, bottom: 15)),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40.0),
-              ),
-            ),
-            backgroundColor: MaterialStateProperty.all(
-                const Color.fromARGB(255, 0, 255, 204)),
-          ),
-          child: Text(
-            course.name,
-            style: const TextStyle(fontSize: 16, color: Colors.black),
-          ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => coursedetail(
-                  courseData: course,
+        return Container(
+          height: 50,
+          child: ElevatedButton(
+            style: ButtonStyle(
+              padding: MaterialStateProperty.all(const EdgeInsets.only(
+                  left: 35, right: 35, top: 15, bottom: 15)),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(40.0),
                 ),
               ),
-            );
-          },
+              backgroundColor: MaterialStateProperty.all(
+                  const Color.fromARGB(255, 0, 255, 204)),
+            ),
+            child: Text(
+              course.name,
+              style: const TextStyle(fontSize: 16, color: Colors.black),
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => coursedetail(
+                    courseData: course,
+                  ),
+                ),
+              );
+            },
+          ),
         );
       },
     );
