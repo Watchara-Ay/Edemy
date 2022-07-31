@@ -2,12 +2,10 @@ import 'package:edgroup/components/logout.dart';
 import 'package:edgroup/data/api/models/response/course_model.dart';
 import 'package:edgroup/data/api/services/course_service.dart';
 import 'package:edgroup/screen/coursedetail.dart';
-import 'package:edgroup/screen/coursedetail2.dart';
-import 'package:edgroup/screen/coursedetail4.dart';
+import 'package:edgroup/screen/login.dart';
 import 'package:flutter/material.dart';
 
 import '../components/categorries.dart';
-import 'coursedetail3.dart';
 
 class homepage extends StatefulWidget {
   const homepage({Key? key}) : super(key: key);
@@ -46,7 +44,7 @@ class _homepageState extends State<homepage> {
                     height: MediaQuery.of(context).size.height / 7,
                     alignment: Alignment.topLeft,
                     child: const Text(
-                      "Hi welcome you all to learn in our app",
+                      "Hi",
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 16.0,
@@ -55,10 +53,10 @@ class _homepageState extends State<homepage> {
                     ),
                   ),
                   Container(
+                    color: Color.fromARGB(255, 255, 0, 0),
                     width: MediaQuery.of(context).size.width / 3,
                     height: MediaQuery.of(context).size.height / 7,
                     alignment: Alignment.topLeft,
-                    child: Image.asset("assets/images/academy.png"),
                   ),
                 ],
               ),
@@ -66,7 +64,6 @@ class _homepageState extends State<homepage> {
                 height: 20,
               ),
               Categories(),
-
               Expanded(
                 child: FutureBuilder<List<Course>>(
                   future: courses,
@@ -89,7 +86,6 @@ class _homepageState extends State<homepage> {
                   },
                 ),
               ),
-
               Container(
                   color: Color.fromARGB(255, 218, 255, 233),
                   height: MediaQuery.of(context).size.height / 12,
@@ -122,18 +118,15 @@ class _homepageState extends State<homepage> {
 
         return ElevatedButton(
           style: ButtonStyle(
-            padding: MaterialStateProperty.all(
-                const EdgeInsets.only(
-                    left: 35, right: 35, top: 15, bottom: 15)),
-            shape:
-                MaterialStateProperty.all<RoundedRectangleBorder>(
+            padding: MaterialStateProperty.all(const EdgeInsets.only(
+                left: 35, right: 35, top: 15, bottom: 15)),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(40.0),
               ),
             ),
             backgroundColor: MaterialStateProperty.all(
-              const Color.fromARGB(255, 0, 255, 204)
-            ),
+                const Color.fromARGB(255, 0, 255, 204)),
           ),
           child: Text(
             course.name,
@@ -150,7 +143,6 @@ class _homepageState extends State<homepage> {
             );
           },
         );
-
       },
     );
   }
