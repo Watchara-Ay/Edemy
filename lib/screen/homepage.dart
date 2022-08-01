@@ -1,6 +1,7 @@
 import 'package:edgroup/components/logout.dart';
 import 'package:edgroup/data/api/models/response/course_model.dart';
 import 'package:edgroup/data/api/services/course_service.dart';
+import 'package:edgroup/screen/addPage.dart';
 import 'package:edgroup/screen/coursedetail.dart';
 import 'package:edgroup/screen/login.dart';
 import 'package:flutter/material.dart';
@@ -89,18 +90,58 @@ class _homepageState extends State<homepage> {
                 ),
               ),
               Container(
-                  color: Color.fromARGB(255, 218, 255, 233),
-                  height: MediaQuery.of(context).size.height / 12,
-                  alignment: Alignment.centerRight,
-                  child:
-                      Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Logout(),
-                      ],
+                color: Color.fromARGB(255, 218, 255, 233),
+                padding: EdgeInsets.all(15),
+                child: Row(
+                  children: [
+                    Container(
+                      alignment: Alignment.center,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all(
+                              const EdgeInsets.only(
+                                  left: 35, right: 35, top: 15, bottom: 15)),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(40.0),
+                            ),
+                          ),
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color.fromARGB(255, 247, 220, 111)),
+                        ),
+                        child: const Text("Add",
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.black)),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const addPage()),
+                          );
+                        },
+                      ),
                     ),
-                  ])),
+                    Container(
+                      width: MediaQuery.of(context).size.width / 2.8,
+                    ),
+                    Container(
+                        color: Color.fromARGB(255, 218, 255, 233),
+                        height: MediaQuery.of(context).size.height / 12,
+                        alignment: Alignment.centerRight,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Logout(),
+                                ],
+                              ),
+                            ])),
+                  ],
+                ),
+              ),
             ],
           ),
         ],
