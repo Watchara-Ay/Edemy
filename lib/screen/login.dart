@@ -12,13 +12,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   final authService = AuthService();
 
   // Text Controllers
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
-  
+
   // States
   bool isLoading = false;
 
@@ -29,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
     usernameController.dispose();
     passwordController.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,8 +42,7 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               Align(
                 alignment: Alignment.topCenter,
-                child: 
-                Image.asset("assets/images/academy.png"),
+                child: Image.asset("assets/images/academy.png"),
               ),
               Container(
                 padding: EdgeInsets.all(10),
@@ -163,31 +161,24 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       final loginSuccess = await authService.login(username, password);
-      
+
       if (loginSuccess) {
         // close the login screen & go to home
         Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const homepage())
-        );
-      }
-      else {
+            context, MaterialPageRoute(builder: (context) => const homepage()));
+      } else {
         ProgressDialog.dismiss(context);
 
         // Find the Scaffold in the widget tree and use it to show a SnackBar.
-        ScaffoldMessenger.of(context)
-          .showSnackBar(
-            const SnackBar( content: Text("Something went wrong, please try again") )
-          );
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Something went wrong, please try again")));
       }
-    } on Exception catch(e) {
+    } on Exception catch (e) {
       log("$e");
-
+      ProgressDialog.dismiss(context);
       // Find the Scaffold in the widget tree and use it to show a SnackBar.
       ScaffoldMessenger.of(context)
-        .showSnackBar(
-          SnackBar( content: Text(e.toString()) )
-        );
+          .showSnackBar(SnackBar(content: Text(e.toString())));
     }
 
     setState(() {

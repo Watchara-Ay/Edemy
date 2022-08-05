@@ -1,16 +1,20 @@
+import 'package:edgroup/data/api/services/course_service.dart';
+import 'package:edgroup/screen/coursedetail.dart';
 import 'package:flutter/material.dart';
 
 import '../data/api/models/response/course_model.dart';
 import 'quizz_screen.dart';
 
 class editPage extends StatelessWidget {
-  const editPage({
+  final courseNameController = TextEditingController();
+  final courseDetailController = TextEditingController();
+  editPage({
     Key? key,
     required this.courseData,
   }) : super(key: key);
 
   final Course courseData;
-
+  CourseService courseService = CourseService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,6 +51,25 @@ class editPage extends StatelessWidget {
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width / 1.2,
+                      height: MediaQuery.of(context).size.height / 14,
+                      decoration: BoxDecoration(
+                          color: const Color.fromARGB(81, 255, 255, 255),
+                          border: Border.all(color: Colors.black)),
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          hintText: 'Course new name',
+                          border: InputBorder.none,
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        onChanged: (email) {},
+                        controller: courseNameController,
+                      ),
+                    ),
+                    Container(
+                      height: 10,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width / 1.2,
                       height: MediaQuery.of(context).size.height / 6,
                       decoration: BoxDecoration(
                           color: const Color.fromARGB(81, 255, 255, 255),
@@ -58,6 +81,7 @@ class editPage extends StatelessWidget {
                         ),
                         keyboardType: TextInputType.emailAddress,
                         onChanged: (email) {},
+                        controller: courseDetailController,
                       ),
                     ),
                     // Container(
@@ -83,7 +107,7 @@ class editPage extends StatelessWidget {
                             alignment: Alignment.centerLeft,
                             child: InkWell(
                               onTap: (() {
-                                Navigator.pop(context);
+                                updateData();
                               }),
                               child: const Text(
                                 "Done",
@@ -134,4 +158,6 @@ class editPage extends StatelessWidget {
           ]),
     );
   }
+
+  void updateData() {}
 }

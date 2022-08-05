@@ -52,7 +52,7 @@ class _QuizzScreenState extends State<QuizzScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: Text(
-                      "Question ${index + 1}/10",
+                      "Question ${index + 1}/4",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         color: Colors.white,
