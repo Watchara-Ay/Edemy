@@ -1,3 +1,4 @@
+import 'package:edgroup/screen/authentication/auth_redirect.dart';
 import 'package:edgroup/screen/login.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           primarySwatch: Colors.blue,
           scaffoldBackgroundColor: Color.fromARGB(255, 118, 215, 196)),
-      home: LoginPage(),
+      home: const AuthRedirectScreen(),
     );
   }
 }

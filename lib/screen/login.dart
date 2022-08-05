@@ -1,5 +1,9 @@
+import 'dart:developer';
+
+import 'package:edgroup/data/api/services/auth_service.dart';
 import 'package:edgroup/screen/homepage.dart';
 import 'package:edgroup/screen/register.dart';
+import 'package:edgroup/ui/shared/progress_dialog.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -8,18 +12,39 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  final authService = AuthService();
+
+  // Text Controllers
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+  
+  // States
+  bool isLoading = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    usernameController.dispose();
+    passwordController.dispose();
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(30, 130, 30, 10),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(30, 130, 30, 48),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Align(
                 alignment: Alignment.topCenter,
-                child: Image.asset("assets/images/academy.png"),
+                child: 
+                Image.asset("assets/images/academy.png"),
               ),
               Container(
                 padding: EdgeInsets.all(10),
@@ -29,6 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                     border: Border.all(width: 1),
                     borderRadius: const BorderRadius.all(Radius.circular(20))),
                 child: TextFormField(
+                  controller: usernameController,
                   decoration: const InputDecoration(
                     hintText: 'Username',
                     border: InputBorder.none,
@@ -48,12 +74,16 @@ class _LoginPageState extends State<LoginPage> {
                     border: Border.all(width: 1),
                     borderRadius: const BorderRadius.all(Radius.circular(20))),
                 child: TextFormField(
+                  controller: passwordController,
                   decoration: const InputDecoration(
                     hintText: 'Password',
                     border: InputBorder.none,
                   ),
                   obscureText: true,
                   onChanged: (password) {},
+                  onTap: () {
+                    selectAll(passwordController);
+                  },
                 ),
               ),
               const SizedBox(
@@ -76,10 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: const Text("Login",
                       style: TextStyle(fontSize: 16, color: Colors.black)),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const homepage()),
-                    );
+                    login();
                   },
                 ),
               ),
@@ -120,6 +147,58 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
+    );
+  }
+
+  void login() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    ProgressDialog.show(context);
+
+    // retrieve data from textfields
+    final String username = usernameController.text;
+    final String password = passwordController.text;
+
+    try {
+      final loginSuccess = await authService.login(username, password);
+      
+      if (loginSuccess) {
+        // close the login screen & go to home
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const homepage())
+        );
+      }
+      else {
+        ProgressDialog.dismiss(context);
+
+        // Find the Scaffold in the widget tree and use it to show a SnackBar.
+        ScaffoldMessenger.of(context)
+          .showSnackBar(
+            const SnackBar( content: Text("Something went wrong, please try again") )
+          );
+      }
+    } on Exception catch(e) {
+      log("$e");
+
+      // Find the Scaffold in the widget tree and use it to show a SnackBar.
+      ScaffoldMessenger.of(context)
+        .showSnackBar(
+          SnackBar( content: Text(e.toString()) )
+        );
+    }
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  void selectAll(TextEditingController controller) {
+    controller.selection = TextSelection(
+      baseOffset: 0,
+      extentOffset: controller.text.length,
     );
   }
 }
