@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 import '../screen/login.dart';
 
 class Logout extends StatelessWidget {
-  const Logout({Key? key}) : super(key: key);
+  VoidCallback? onLogoutPressed;
+
+  Logout({
+    Key? key,
+    this.onLogoutPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +29,7 @@ class Logout extends StatelessWidget {
         child: const Text("Logout",
             style: TextStyle(fontSize: 16, color: Colors.black)),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => LoginPage()),
-          );
+          onLogoutPressed?.call();
         },
       ),
     );

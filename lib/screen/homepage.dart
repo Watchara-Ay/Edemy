@@ -1,9 +1,11 @@
 import 'package:edgroup/components/logout.dart';
 import 'package:edgroup/data/api/models/response/course_model.dart';
+import 'package:edgroup/data/api/services/auth_service.dart';
 import 'package:edgroup/data/api/services/course_service.dart';
 import 'package:edgroup/screen/coursedetail.dart';
 import 'package:edgroup/screen/coursedetail2.dart';
 import 'package:edgroup/screen/coursedetail4.dart';
+import 'package:edgroup/screen/login.dart';
 import 'package:flutter/material.dart';
 
 import '../components/categorries.dart';
@@ -19,6 +21,8 @@ class homepage extends StatefulWidget {
 class _homepageState extends State<homepage> {
   String filterType = "MATH";
   String taskPop = "close";
+
+  AuthService authService = AuthService();
 
   late Future<List<Course>> courses;
   CourseService courseService = CourseService();
@@ -99,7 +103,11 @@ class _homepageState extends State<homepage> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Logout(),
+                        Logout(
+                          onLogoutPressed: () {
+                            logout();
+                          },
+                        ),
                       ],
                     ),
                   ])),
@@ -152,6 +160,15 @@ class _homepageState extends State<homepage> {
         );
 
       },
+    );
+  }
+
+  void logout() async {
+    await authService.logout();
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
     );
   }
 }
