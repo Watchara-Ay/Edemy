@@ -1,10 +1,10 @@
-import 'package:edgroup/screen/homepage.dart';
-import 'package:edgroup/screen/login.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Registerpage extends StatelessWidget {
-  const Registerpage({Key? key}) : super(key: key);
+import 'homepage.dart';
+import 'login.dart';
+
+class addPage extends StatelessWidget {
+  const addPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class Registerpage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: const <Widget>[
               Text(
-                'Register Page',
+                'Add course',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 50.0,
@@ -45,7 +45,7 @@ class Registerpage extends StatelessWidget {
                           const BorderRadius.all(Radius.circular(20))),
                   child: TextFormField(
                     decoration: const InputDecoration(
-                      hintText: 'Username',
+                      hintText: 'Course name',
                       border: InputBorder.none,
                     ),
                     keyboardType: TextInputType.emailAddress,
@@ -57,55 +57,16 @@ class Registerpage extends StatelessWidget {
                 ),
                 Container(
                   padding: EdgeInsets.all(10),
-                  height: MediaQuery.of(context).size.height / 15,
+                  height: MediaQuery.of(context).size.height / 6,
                   decoration: BoxDecoration(
                       color: const Color.fromRGBO(217, 217, 217, 100),
                       border: Border.all(width: 1),
                       borderRadius:
                           const BorderRadius.all(Radius.circular(20))),
                   child: TextFormField(
+                    maxLines: null,
                     decoration: const InputDecoration(
-                      hintText: 'Email',
-                      border: InputBorder.none,
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                    onChanged: (email) {},
-                  ),
-                ),
-                Container(
-                  height: 24,
-                ),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  height: MediaQuery.of(context).size.height / 15,
-                  decoration: BoxDecoration(
-                      color: const Color.fromRGBO(217, 217, 217, 100),
-                      border: Border.all(width: 1),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(20))),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: 'Password',
-                      border: InputBorder.none,
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                    onChanged: (email) {},
-                  ),
-                ),
-                Container(
-                  height: 24,
-                ),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  height: MediaQuery.of(context).size.height / 15,
-                  decoration: BoxDecoration(
-                      color: const Color.fromRGBO(217, 217, 217, 100),
-                      border: Border.all(width: 1),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(20))),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: 'Repassword',
+                      hintText: 'Course infomation',
                       border: InputBorder.none,
                     ),
                     keyboardType: TextInputType.emailAddress,
@@ -121,11 +82,7 @@ class Registerpage extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: InkWell(
                         onTap: (() {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginPage()),
-                          );
+                          Navigator.pop(context);
                         }),
                         child: const Text(
                           "Cancel",
