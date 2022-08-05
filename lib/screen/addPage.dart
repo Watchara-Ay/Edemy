@@ -1,10 +1,19 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
-import 'homepage.dart';
-import 'login.dart';
+import '../data/api/services/course_service.dart';
+import '../ui/shared/progress_dialog.dart';
 
-class addPage extends StatelessWidget {
+class addPage extends StatefulWidget {
   const addPage({Key? key}) : super(key: key);
+
+  @override
+  State<addPage> createState() => _addPageState();
+}
+
+class _addPageState extends State<addPage> {
+  CourseService courseService = CourseService();
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +59,7 @@ class addPage extends StatelessWidget {
                     ),
                     keyboardType: TextInputType.emailAddress,
                     onChanged: (email) {},
+                    controller: courseNameController,
                   ),
                 ),
                 Container(
@@ -71,6 +81,7 @@ class addPage extends StatelessWidget {
                     ),
                     keyboardType: TextInputType.emailAddress,
                     onChanged: (email) {},
+                    controller: courseDetailController,
                   ),
                 ),
                 Container(
@@ -111,15 +122,11 @@ class addPage extends StatelessWidget {
                           backgroundColor: MaterialStateProperty.all(
                               const Color.fromARGB(255, 247, 220, 111)),
                         ),
-                        child: const Text("Register",
+                        child: const Text("Confirm",
                             style:
                                 TextStyle(fontSize: 16, color: Colors.black)),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const homepage()),
-                          );
+                          addCourse();
                         },
                       ),
                     ),
@@ -141,5 +148,34 @@ class addPage extends StatelessWidget {
         ),
       ]),
     );
+  }
+
+  final courseNameController = TextEditingController();
+  final courseDetailController = TextEditingController();
+
+  void addCourse() async {
+    ProgressDialog.show(context);
+    try {
+      final updateSuccess = await courseService.addCourse(
+          courseNameController.text, courseDetailController.text);
+
+      if (updateSuccess) {
+        ProgressDialog.dismiss(context);
+        //to do
+        Navigator.pop((context));
+      } else {
+        ProgressDialog.dismiss(context);
+
+        // Find the Scaffold in the widget tree and use it to show a SnackBar.
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Something went wrong, please try again")));
+      }
+    } on Exception catch (e) {
+      log("$e");
+      ProgressDialog.dismiss(context);
+      // Find the Scaffold in the widget tree and use it to show a SnackBar.
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+    }
   }
 }

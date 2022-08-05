@@ -1,19 +1,30 @@
-import 'package:edgroup/data/api/services/course_service.dart';
-import 'package:edgroup/screen/coursedetail.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import '../data/api/models/response/course_model.dart';
-import 'quizz_screen.dart';
+import '../data/api/services/course_service.dart';
+import '../ui/shared/progress_dialog.dart';
 
-class editPage extends StatelessWidget {
-  final courseNameController = TextEditingController();
-  final courseDetailController = TextEditingController();
-  editPage({
-    Key? key,
-    required this.courseData,
-  }) : super(key: key);
-
+class editPage extends StatefulWidget {
   final Course courseData;
+  const editPage({Key? key, required this.courseData}) : super(key: key);
+
+  @override
+  State<editPage> createState() => _editPageState();
+}
+
+class _editPageState extends State<editPage> {
+  late TextEditingController courseNameController;
+  late TextEditingController courseDetailController;
+
+  @override
+  void initState() {
+    courseNameController = TextEditingController(text: widget.courseData.name);
+    courseDetailController =
+        TextEditingController(text: widget.courseData.courseDetail);
+  }
+
   CourseService courseService = CourseService();
   @override
   Widget build(BuildContext context) {
@@ -159,5 +170,32 @@ class editPage extends StatelessWidget {
     );
   }
 
-  void updateData() {}
+  void updateData() async {
+    ProgressDialog.show(context);
+    try {
+      final updateSuccess = await courseService.updateCourse(
+          widget.courseData.id,
+          courseNameController.text,
+          courseDetailController.text);
+
+      if (updateSuccess) {
+        ProgressDialog.dismiss(context);
+        //to do
+        Navigator.pop((context));
+        Navigator.pop((context));
+      } else {
+        ProgressDialog.dismiss(context);
+
+        // Find the Scaffold in the widget tree and use it to show a SnackBar.
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Something went wrong, please try again")));
+      }
+    } on Exception catch (e) {
+      log("$e");
+      ProgressDialog.dismiss(context);
+      // Find the Scaffold in the widget tree and use it to show a SnackBar.
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+    }
+  }
 }

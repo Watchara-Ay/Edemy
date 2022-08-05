@@ -1,18 +1,23 @@
-import 'package:edgroup/data/api/models/response/course_model.dart';
-import 'package:edgroup/screen/editPage.dart';
-import 'package:edgroup/screen/quizz_screen.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
-import 'homepage.dart';
-import 'login.dart';
+import '../data/api/models/response/course_model.dart';
+import '../data/api/services/course_service.dart';
+import '../ui/shared/progress_dialog.dart';
+import 'editPage.dart';
+import 'quizz_screen.dart';
 
-class coursedetail extends StatelessWidget {
-  const coursedetail({
-    Key? key,
-    required this.courseData,
-  }) : super(key: key);
-
+class coursedetail extends StatefulWidget {
+  const coursedetail({Key? key, required this.courseData}) : super(key: key);
   final Course courseData;
+  @override
+  State<coursedetail> createState() => _coursedetailState();
+}
+
+class _coursedetailState extends State<coursedetail> {
+  @override
+  CourseService courseService = CourseService();
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +35,7 @@ class coursedetail extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    courseData.name,
+                    widget.courseData.name,
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 40.0,
@@ -55,7 +60,7 @@ class coursedetail extends StatelessWidget {
                           color: const Color.fromARGB(81, 255, 255, 255),
                           border: Border.all(color: Colors.black)),
                       child: Text(
-                        courseData.courseDetail,
+                        widget.courseData.courseDetail,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 18.0,
@@ -74,8 +79,8 @@ class coursedetail extends StatelessWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            editPage(courseData: courseData)));
+                                        builder: (context) => editPage(
+                                            courseData: widget.courseData)));
                               }),
                               child: const Text(
                                 "Edit",
@@ -93,7 +98,7 @@ class coursedetail extends StatelessWidget {
                             alignment: Alignment.centerLeft,
                             child: InkWell(
                               onTap: (() {
-                                Navigator.pop(context);
+                                deletedata();
                               }),
                               child: const Text(
                                 "Delete",
@@ -213,5 +218,31 @@ class coursedetail extends StatelessWidget {
             ),
           ]),
     );
+  }
+
+  void deletedata() async {
+    ProgressDialog.show(context);
+    try {
+      final updateSuccess =
+          await courseService.deleteCourse(widget.courseData.id);
+
+      if (updateSuccess) {
+        ProgressDialog.dismiss(context);
+        //to do
+        Navigator.pop((context));
+      } else {
+        ProgressDialog.dismiss(context);
+
+        // Find the Scaffold in the widget tree and use it to show a SnackBar.
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Something went wrong, please try again")));
+      }
+    } on Exception catch (e) {
+      log("$e");
+      ProgressDialog.dismiss(context);
+      // Find the Scaffold in the widget tree and use it to show a SnackBar.
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+    }
   }
 }

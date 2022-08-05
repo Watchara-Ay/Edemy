@@ -22,15 +22,17 @@ class _homepageState extends State<homepage> {
 
   AuthService authService = AuthService();
 
-  late Future<List<Course>> courses;
+  List<Course> courses = [];
   CourseService courseService = CourseService();
-
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
   @override
   void initState() {
     super.initState();
 
     // fetch the necessary data
-    courses = courseService.getCourseList();
+    //courses = courseService.getCourseList();
+    refreshdata();
   }
 
   @override
@@ -70,26 +72,26 @@ class _homepageState extends State<homepage> {
               Expanded(
                 child: Container(
                   color: Color.fromARGB(255, 218, 255, 233),
-                  child: FutureBuilder<List<Course>>(
-                    future: courses,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return _buildCourseList(context, snapshot.data ?? []);
-                      } else if (snapshot.hasError) {
-                        return Text('${snapshot.error}');
-                      }
+                  child: _buildCourseList(context, courses),
+                  // child: FutureBuilder<List<Course>>(
+                  //   builder: (context, snapshot) {
+                  //     if (snapshot.hasData) {
+                  //       return _buildCourseList(context, snapshot.data ?? []);
+                  //     } else if (snapshot.hasError) {
+                  //       return Text('${snapshot.error}');
+                  //     }
 
-                      // By default, show a loading spinner.
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: const [
-                          CircularProgressIndicator(
-                            color: Colors.black38,
-                          ),
-                        ],
-                      );
-                    },
-                  ),
+                  //     // By default, show a loading spinner.
+                  //     return Column(
+                  //       mainAxisSize: MainAxisSize.min,
+                  //       children: const [
+                  //         CircularProgressIndicator(
+                  //           color: Colors.black38,
+                  //         ),
+                  //       ],
+                  //     );
+                  //   },
+                  // ),
                 ),
               ),
               Container(
@@ -117,11 +119,7 @@ class _homepageState extends State<homepage> {
                             style:
                                 TextStyle(fontSize: 16, color: Colors.black)),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const addPage()),
-                          );
+                          add();
                         },
                       ),
                     ),
@@ -156,48 +154,54 @@ class _homepageState extends State<homepage> {
     );
   }
 
-  ListView _buildCourseList(BuildContext context, List<Course> courses) {
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 24,
-      ),
-      itemCount: courses.length,
-      itemBuilder: (context, index) {
-        var course = courses[index];
+  Widget _buildCourseList(BuildContext context, List<Course> courses) {
+    return RefreshIndicator(
+      key: _refreshIndicatorKey,
+      onRefresh: () async {
+        await refreshdata();
+      },
+      child: ListView.builder(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 24,
+        ),
+        itemCount: courses.length,
+        itemBuilder: (context, index) {
+          var course = courses[index];
 
-        return Container(
-          height: 50,
-          child: ElevatedButton(
-            style: ButtonStyle(
-              padding: MaterialStateProperty.all(const EdgeInsets.only(
-                  left: 35, right: 35, top: 15, bottom: 15)),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40.0),
-                ),
-              ),
-              backgroundColor: MaterialStateProperty.all(
-                  const Color.fromARGB(255, 0, 255, 204)),
-            ),
-            child: Text(
-              course.name,
-              style: const TextStyle(fontSize: 16, color: Colors.black),
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => coursedetail(
-                    courseData: course,
+          return Container(
+            height: 50,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all(const EdgeInsets.only(
+                    left: 35, right: 35, top: 15, bottom: 15)),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(40.0),
                   ),
                 ),
-              );
-            },
-          ),
-        );
-      },
+                backgroundColor: MaterialStateProperty.all(
+                    const Color.fromARGB(255, 0, 255, 204)),
+              ),
+              child: Text(
+                course.name,
+                style: const TextStyle(fontSize: 16, color: Colors.black),
+              ),
+              onPressed: () {
+                viewdetail(course);
+              },
+            ),
+          );
+        },
+      ),
     );
+  }
+
+  Future<void> refreshdata() async {
+    var result = await courseService.getCourseList();
+    setState(() {
+      courses = result;
+    });
   }
 
   void logoutAndRestartApp() async {
@@ -208,5 +212,25 @@ class _homepageState extends State<homepage> {
       MaterialPageRoute(builder: (context) => const AuthRedirectScreen()),
       (route) => false,
     );
+  }
+
+  void add() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const addPage()),
+    );
+    _refreshIndicatorKey.currentState?.show();
+  }
+
+  void viewdetail(Course course) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => coursedetail(
+          courseData: course,
+        ),
+      ),
+    );
+    _refreshIndicatorKey.currentState?.show();
   }
 }
