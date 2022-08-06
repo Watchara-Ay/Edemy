@@ -170,6 +170,10 @@ class _homepageState extends State<homepage> {
           var course = courses[index];
 
           return Container(
+            margin: const EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(3.0),
+            decoration: BoxDecoration(
+                border: Border.all(color: Color.fromARGB(255, 255, 68, 68))),
             height: 50,
             child: ElevatedButton(
               style: ButtonStyle(
